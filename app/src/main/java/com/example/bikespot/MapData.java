@@ -25,9 +25,52 @@ public class MapData {
 
     public ArrayList<BikePlace> getBikePlaces() throws IOException, JSONException {
 
+        ArrayList<BikePlace> bikePlaces = new ArrayList();
+
+        // Loops through JSONArray of each Bike Place from CStat Data
+        // and assigns attributes dissected from data to new BikePlace objects
+        // to be put in ArrayList of BikePlaces
 
         JSONArray bikePlaceDataArray = getBikeRackJSONArray();
-        return new ArrayList<BikePlace>();
+        for (int i = 0; i < bikePlaceDataArray.length(); i++) {
+            JSONArray tempBikePlace = (JSONArray) bikePlaceDataArray.get(i);
+
+            int objectID = (int) tempBikePlace.get(0);
+            String address = (String) tempBikePlace.get(9);
+            String business = (String) tempBikePlace.get(10);
+            String parkingModules;
+            String totalSpotsString;
+            int totalSpots;
+
+            // issues with data holes for racks and spaces solved by if
+            // TODO: change so that both aren't affected for single info hole
+            if(!tempBikePlace.get(11).toString().equals("null") && !tempBikePlace.get(12).toString().equals("null")) {
+                parkingModules = (String) tempBikePlace.get(11);
+                totalSpotsString = (String) tempBikePlace.get(12);
+                totalSpots = Integer.parseInt(totalSpotsString);
+            } else {
+                parkingModules = "DATA NOT AVAILABLE";
+                totalSpotsString = "-1";
+                totalSpots = Integer.parseInt(totalSpotsString);
+            }
+
+//            System.out.println("Object ID: " + objectID);
+//            System.out.println("Address: " + address);
+//            System.out.println("Business: " + business);
+//            System.out.println("Parking Modules: " + parkingModules);
+//            System.out.println("Total Spots: " + totalSpots);
+//            System.out.println("----------------------------- \n\n");
+
+            BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots);
+            System.out.println(bikePlace.toString());
+            System.out.println("----------------------------- \n\n");
+            bikePlaces.add(bikePlace);
+
+        }
+
+
+
+        return bikePlaces;
 
     }
 

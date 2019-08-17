@@ -15,18 +15,20 @@ public class BikePlace {
     private int objectID;
     private String address;
     private String businessName;
-    private int parkingModules;
+    private String parkingModules;
     private int totalSpaces;
+    private int longitude;
+    private int latitude;
 
     public BikePlace() {
         objectID = 0;
         address = "";
         businessName = "";
-        parkingModules = 0;
+        parkingModules = "";
         totalSpaces = 0;
     }
 
-    public BikePlace(int objectID, String address, String businessName, int parkingModules, int totalSpaces) {
+    public BikePlace(int objectID, String address, String businessName, String parkingModules, int totalSpaces) {
         this.objectID = objectID;
         this.address = address;
         this.businessName = businessName;
@@ -58,11 +60,11 @@ public class BikePlace {
         this.businessName = businessName;
     }
 
-    public int getParkingModules() {
+    public String getParkingModules() {
         return parkingModules;
     }
 
-    public void setParkingModules(int parkingModules) {
+    public void setParkingModules(String parkingModules) {
         this.parkingModules = parkingModules;
     }
 

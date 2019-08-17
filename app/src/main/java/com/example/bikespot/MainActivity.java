@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button button_findBikeRack;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 MapData m = new MapData();
                 try {
                     text_testingGround.setText(m.getBikeRackJSONArray().toString());
+                    ArrayList<BikePlace> poop = m.getBikePlaces();
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
