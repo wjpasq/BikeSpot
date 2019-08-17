@@ -54,14 +54,20 @@ public class MapData {
                 totalSpots = Integer.parseInt(totalSpotsString);
             }
 
+            JSONArray coordPackage = tempBikePlace.getJSONArray(14);
+            double latitude = Double.parseDouble((String) coordPackage.get(1));
+            double longitude = Double.parseDouble((String) coordPackage.get(2));
+
 //            System.out.println("Object ID: " + objectID);
 //            System.out.println("Address: " + address);
 //            System.out.println("Business: " + business);
 //            System.out.println("Parking Modules: " + parkingModules);
 //            System.out.println("Total Spots: " + totalSpots);
+//            System.out.println("Latitude: " + latitude);
+//            System.out.println("Longitude: " + longitude;
 //            System.out.println("----------------------------- \n\n");
 
-            BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots);
+            BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots, latitude, longitude);
             System.out.println(bikePlace.toString());
             System.out.println("----------------------------- \n\n");
             bikePlaces.add(bikePlace);

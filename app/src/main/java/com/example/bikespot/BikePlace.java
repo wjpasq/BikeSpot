@@ -17,8 +17,9 @@ public class BikePlace {
     private String businessName;
     private String parkingModules;
     private int totalSpaces;
-    private int longitude;
-    private int latitude;
+    private double latitude;
+    private double longitude;
+
 
     public BikePlace() {
         objectID = 0;
@@ -26,14 +27,35 @@ public class BikePlace {
         businessName = "";
         parkingModules = "";
         totalSpaces = 0;
+        latitude = 0;
+        longitude = 0;
+
     }
 
-    public BikePlace(int objectID, String address, String businessName, String parkingModules, int totalSpaces) {
+    public BikePlace(int objectID, String address, String businessName, String parkingModules, int totalSpaces, double latitude, double longitude) {
         this.objectID = objectID;
         this.address = address;
         this.businessName = businessName;
         this.parkingModules = parkingModules;
         this.totalSpaces = totalSpaces;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public int getObjectID() {
@@ -82,8 +104,10 @@ public class BikePlace {
                 "objectID=" + objectID +
                 ", address='" + address + '\'' +
                 ", businessName='" + businessName + '\'' +
-                ", parkingModules=" + parkingModules +
+                ", parkingModules='" + parkingModules + '\'' +
                 ", totalSpaces=" + totalSpaces +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 '}';
     }
 }
