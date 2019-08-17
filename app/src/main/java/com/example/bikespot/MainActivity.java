@@ -8,9 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button button_findBikeRack;
     private TextView text_welcome;
+    private TextView text_testingGround;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +25,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         button_findBikeRack = (Button) findViewById(R.id.button_findBikeRack);
         text_welcome = (TextView) findViewById(R.id.textView_welcome);
+        text_testingGround = (TextView) findViewById(R.id.textView_testingGround);
 
         button_findBikeRack.setOnClickListener(this);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // testing
+                MapData m = new MapData();
+                try {
+                    text_testingGround.setText(m.getBikeRackJSONArray().toString());
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
     }
 
 
@@ -29,4 +51,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent mapIntent = new Intent(this, MapsActivity.class);
         startActivity(mapIntent);
     }
+
+
 }
