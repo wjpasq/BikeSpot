@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button_findBikeRack = findViewById(R.id.button_findBikeRack);
-        text_welcome = findViewById(R.id.textView_welcome);
+        button_findBikeRack = (Button) findViewById(R.id.button_findBikeRack);
+        text_welcome = (TextView) findViewById(R.id.textView_welcome);
 
         button_findBikeRack.setOnClickListener(this);
     }
