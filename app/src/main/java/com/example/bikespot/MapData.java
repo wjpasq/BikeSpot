@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
-public class MapData implements Callable{
+public class MapData {
 
     private ArrayList<BikePlace> bikePlaces = new ArrayList();
 
@@ -25,7 +25,7 @@ public class MapData implements Callable{
         this.bikePlaces = bikePlaces;
     }
 
-    public ArrayList<BikePlace> call() throws IOException, JSONException {
+    public ArrayList<BikePlace> getBikePlaces() throws IOException, JSONException {
 
 
         // Loops through JSONArray of each Bike Place from CStat Data
@@ -58,7 +58,13 @@ public class MapData implements Callable{
             }
 
             Random random = new Random();
-            int openSpots = random.nextInt(totalSpots - 2 + 1) + 2;
+
+            int openSpots;
+            if(totalSpots != -1) {
+                openSpots = random.nextInt(totalSpots - 2 + 1) + 2;
+            } else {
+                openSpots = -1;
+            }
 
             JSONArray coordPackage = tempBikePlace.getJSONArray(14);
             double latitude = Double.parseDouble((String) coordPackage.get(1));
