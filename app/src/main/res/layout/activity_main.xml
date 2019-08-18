@@ -9,21 +9,24 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
-        android:layout_width="398dp"
-        android:layout_height="63dp"
+        android:layout_width="430dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo"/>
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -52,6 +55,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="76dp"
+        android:background="@drawable/cool_button"
+        android:backgroundTint="@color/colorPrimary"
         android:text="Find Bike Rack"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
