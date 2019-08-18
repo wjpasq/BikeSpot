@@ -213,7 +213,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d("SUCCESS", "Marker" + marker.getTitle() + "has been clicked");
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(marker.getSnippet());
         bottomSheetDialog.show(getSupportFragmentManager(), "BottomSheet");
 
         return false;

@@ -12,6 +12,13 @@ import com.example.bikespot.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
+        private String bikePlace;
+
+
+        public BottomSheetDialog(String bikePlace) {
+            super();
+            this.bikePlace = bikePlace;
+        }
 
 
     @Nullable
