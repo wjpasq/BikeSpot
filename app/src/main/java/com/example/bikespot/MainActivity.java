@@ -30,21 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         button_findBikeRack.setOnClickListener(this);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // testing
-                MapData m = new MapData();
-                try {
-                    text_testingGround.setText(m.getBikeRackJSONArray().toString());
-                    ArrayList<BikePlace> poop = m.getBikePlaces();
-                } catch (IOException | JSONException | InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
-        thread.start();
     }
 
 
