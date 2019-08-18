@@ -12,6 +12,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MapData {
 
@@ -25,66 +29,79 @@ public class MapData {
         this.bikePlaces = bikePlaces;
     }
 
-    public ArrayList<BikePlace> getBikePlaces() throws IOException, JSONException {
+    public ArrayList<BikePlace> getBikePlaces() throws IOException, JSONException, InterruptedException, ExecutionException {
 
+
+        // All Network calls need to be done outside UI thread
+        // executed with callable and executor service
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Callable<JSONArray> callable = new Callable<JSONArray>() {
+            @Override
+            public JSONArray call() throws Exception {
+                JSONArray data = getBikeRackJSONArray();
+                return data;
+            }
+        };
+
+        Future<JSONArray> future = executor.submit(callable);
+        JSONArray bikePlaceDataArray = future.get();
 
         // Loops through JSONArray of each Bike Place from CStat Data
         // and assigns attributes dissected from data to new BikePlace objects
         // to be put in ArrayList of BikePlaces
 
 
-        JSONArray bikePlaceDataArray = getBikeRackJSONArray();
+            for (int i = 0; i < bikePlaceDataArray.length(); i++) {
+                JSONArray tempBikePlace = (JSONArray) bikePlaceDataArray.get(i);
 
-        for (int i = 0; i < bikePlaceDataArray.length(); i++) {
-            JSONArray tempBikePlace = (JSONArray) bikePlaceDataArray.get(i);
+                int objectID = (int) tempBikePlace.get(0);
+                String address = (String) tempBikePlace.get(9);
+                String business = (String) tempBikePlace.get(10);
+                String parkingModules;
+                String totalSpotsString;
+                int totalSpots;
 
-            int objectID = (int) tempBikePlace.get(0);
-            String address = (String) tempBikePlace.get(9);
-            String business = (String) tempBikePlace.get(10);
-            String parkingModules;
-            String totalSpotsString;
-            int totalSpots;
+                // issues with data holes for racks and spaces solved by if
+                // TODO: change so that both aren't affected for single info hole
+                if (!tempBikePlace.get(11).toString().equals("null") && !tempBikePlace.get(12).toString().equals("null")) {
+                    parkingModules = (String) tempBikePlace.get(11);
+                    totalSpotsString = (String) tempBikePlace.get(12);
+                    totalSpots = Integer.parseInt(totalSpotsString);
+                } else {
+                    parkingModules = "DATA NOT AVAILABLE";
+                    totalSpotsString = "-1";
+                    totalSpots = Integer.parseInt(totalSpotsString);
+                }
 
-            // issues with data holes for racks and spaces solved by if
-            // TODO: change so that both aren't affected for single info hole
-            if (!tempBikePlace.get(11).toString().equals("null") && !tempBikePlace.get(12).toString().equals("null")) {
-                parkingModules = (String) tempBikePlace.get(11);
-                totalSpotsString = (String) tempBikePlace.get(12);
-                totalSpots = Integer.parseInt(totalSpotsString);
-            } else {
-                parkingModules = "DATA NOT AVAILABLE";
-                totalSpotsString = "-1";
-                totalSpots = Integer.parseInt(totalSpotsString);
+                Random random = new Random();
+
+                int openSpots;
+                if(totalSpots != -1) {
+                    openSpots = random.nextInt(totalSpots - 2 + 1) + 2;
+                } else {
+                    openSpots = -1;
+                }
+
+                JSONArray coordPackage = tempBikePlace.getJSONArray(14);
+                double latitude = Double.parseDouble((String) coordPackage.get(1));
+                double longitude = Double.parseDouble((String) coordPackage.get(2));
+
+                //            System.out.println("Object ID: " + objectID);
+                //            System.out.println("Address: " + address);
+                //            System.out.println("Business: " + business);
+                //            System.out.println("Parking Modules: " + parkingModules);
+                //            System.out.println("Total Spots: " + totalSpots);
+                //            System.out.println("Latitude: " + latitude);
+                //            System.out.println("Longitude: " + longitude;
+                //            System.out.println("----------------------------- \n\n");
+
+                BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots, openSpots, latitude, longitude);
+                System.out.println(bikePlace.toString());
+                System.out.println("----------------------------- \n\n");
+                bikePlaces.add(bikePlace);
+
             }
 
-            Random random = new Random();
-
-            int openSpots;
-            if(totalSpots != -1) {
-                openSpots = random.nextInt(totalSpots - 2 + 1) + 2;
-            } else {
-                openSpots = -1;
-            }
-
-            JSONArray coordPackage = tempBikePlace.getJSONArray(14);
-            double latitude = Double.parseDouble((String) coordPackage.get(1));
-            double longitude = Double.parseDouble((String) coordPackage.get(2));
-
-            //            System.out.println("Object ID: " + objectID);
-            //            System.out.println("Address: " + address);
-            //            System.out.println("Business: " + business);
-            //            System.out.println("Parking Modules: " + parkingModules);
-            //            System.out.println("Total Spots: " + totalSpots);
-            //            System.out.println("Latitude: " + latitude);
-            //            System.out.println("Longitude: " + longitude;
-            //            System.out.println("----------------------------- \n\n");
-
-            BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots, openSpots, latitude, longitude);
-            System.out.println(bikePlace.toString());
-            System.out.println("----------------------------- \n\n");
-            bikePlaces.add(bikePlace);
-
-        }
             return bikePlaces;
     }
 

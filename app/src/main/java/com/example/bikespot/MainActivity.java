@@ -12,6 +12,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button button_findBikeRack;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     text_testingGround.setText(m.getBikeRackJSONArray().toString());
                     ArrayList<BikePlace> poop = m.getBikePlaces();
-                } catch (IOException | JSONException e) {
+                } catch (IOException | JSONException | InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
             }
