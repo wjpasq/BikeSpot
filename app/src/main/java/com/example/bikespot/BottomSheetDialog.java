@@ -1,6 +1,5 @@
 package com.example.bikespot;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bikespot.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
         private BikePlace bikePlace;
-        private TextView bottomSheetText;
+        private TextView businessName;
+        private TextView address;
 
 
         public BottomSheetDialog(BikePlace bikePlace, AppCompatActivity activity) {
@@ -26,15 +25,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         }
 
         private void formatText() {
-            if (bottomSheetText != null) {
-                String text = "\t" + bikePlace.getBusinessName()
-                        + "\nAddress: " + bikePlace.getAddress()
-                        + "\n\nOpen Spaces: " + bikePlace.getOpenSpaces()
-                        + "\nTotal Spaces:" + bikePlace.getTotalSpaces();
-                bottomSheetText.setText(text);
-            } else {
-                Log.e("NULL POINTER", "Cannot find id textView_bottomSheet in BottomSheetDialog class");
-            }
+
+            businessName.setText(bikePlace.getBusinessName());
+            address.setText(bikePlace.getAddress());
+
         }
 
 
@@ -42,7 +36,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
-        bottomSheetText = v.findViewById(R.id.textView_bottomSheet);
+        businessName = v.findViewById(R.id.textView_businessName);
+        address = v.findViewById(R.id.textView_address);
         formatText();
         return v;
     }
