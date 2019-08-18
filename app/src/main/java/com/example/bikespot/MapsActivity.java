@@ -44,6 +44,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener {
@@ -56,11 +58,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int REQUEST_USER_LOCATION_CODE = 99;
     private final ArrayList<BikePlace> finalBikePlaces = new ArrayList<>();
     private TextView textView_Test;
+    private HashMap<String, BikePlace> bikePlaceInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        bikePlaceInfo = new HashMap<>();
 
         //textView_Test = findViewById(R.id.textView_test);
 
@@ -119,10 +124,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.position(latLng);
             markerOptions.title(bp.getBusinessName());
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            markerOptions.snippet(bp.toString());
 
             //add click listener for the marker
             mMap.setOnMarkerClickListener(this);
+
+            //add bpInfo to map
+            bikePlaceInfo.put(bp.getBusinessName(), bp);
 
             mMap.addMarker(markerOptions);
         }
@@ -213,7 +220,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d("SUCCESS", "Marker" + marker.getTitle() + "has been clicked");
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(marker.getSnippet());
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(bikePlaceInfo.get(marker.getTitle()));
         bottomSheetDialog.show(getSupportFragmentManager(), "BottomSheet");
 
         return false;
