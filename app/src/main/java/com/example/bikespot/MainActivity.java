@@ -1,6 +1,7 @@
 package com.example.bikespot;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         button_findBikeRack = (Button) findViewById(R.id.button_findBikeRack);
         text_welcome = (TextView) findViewById(R.id.textView_welcome);
+        setTitle("");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
 
         button_findBikeRack.setOnClickListener(this);
     }
