@@ -10,8 +10,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.Callable;
 
-public class MapData {
+public class MapData implements Callable{
 
     private ArrayList<BikePlace> bikePlaces = new ArrayList();
 
@@ -23,15 +25,16 @@ public class MapData {
         this.bikePlaces = bikePlaces;
     }
 
-    public ArrayList<BikePlace> getBikePlaces() throws IOException, JSONException {
+    public ArrayList<BikePlace> call() throws IOException, JSONException {
 
-        ArrayList<BikePlace> bikePlaces = new ArrayList();
 
         // Loops through JSONArray of each Bike Place from CStat Data
         // and assigns attributes dissected from data to new BikePlace objects
         // to be put in ArrayList of BikePlaces
 
+
         JSONArray bikePlaceDataArray = getBikeRackJSONArray();
+
         for (int i = 0; i < bikePlaceDataArray.length(); i++) {
             JSONArray tempBikePlace = (JSONArray) bikePlaceDataArray.get(i);
 
@@ -44,7 +47,7 @@ public class MapData {
 
             // issues with data holes for racks and spaces solved by if
             // TODO: change so that both aren't affected for single info hole
-            if(!tempBikePlace.get(11).toString().equals("null") && !tempBikePlace.get(12).toString().equals("null")) {
+            if (!tempBikePlace.get(11).toString().equals("null") && !tempBikePlace.get(12).toString().equals("null")) {
                 parkingModules = (String) tempBikePlace.get(11);
                 totalSpotsString = (String) tempBikePlace.get(12);
                 totalSpots = Integer.parseInt(totalSpotsString);
@@ -54,31 +57,31 @@ public class MapData {
                 totalSpots = Integer.parseInt(totalSpotsString);
             }
 
+            Random random = new Random();
+            int openSpots = random.nextInt(totalSpots - 2 + 1) + 2;
+
             JSONArray coordPackage = tempBikePlace.getJSONArray(14);
             double latitude = Double.parseDouble((String) coordPackage.get(1));
             double longitude = Double.parseDouble((String) coordPackage.get(2));
 
-//            System.out.println("Object ID: " + objectID);
-//            System.out.println("Address: " + address);
-//            System.out.println("Business: " + business);
-//            System.out.println("Parking Modules: " + parkingModules);
-//            System.out.println("Total Spots: " + totalSpots);
-//            System.out.println("Latitude: " + latitude);
-//            System.out.println("Longitude: " + longitude;
-//            System.out.println("----------------------------- \n\n");
+            //            System.out.println("Object ID: " + objectID);
+            //            System.out.println("Address: " + address);
+            //            System.out.println("Business: " + business);
+            //            System.out.println("Parking Modules: " + parkingModules);
+            //            System.out.println("Total Spots: " + totalSpots);
+            //            System.out.println("Latitude: " + latitude);
+            //            System.out.println("Longitude: " + longitude;
+            //            System.out.println("----------------------------- \n\n");
 
-            BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots, latitude, longitude);
+            BikePlace bikePlace = new BikePlace(objectID, address, business, parkingModules, totalSpots, openSpots, latitude, longitude);
             System.out.println(bikePlace.toString());
             System.out.println("----------------------------- \n\n");
             bikePlaces.add(bikePlace);
 
         }
-
-
-
-        return bikePlaces;
-
+            return bikePlaces;
     }
+
 
     public JSONArray getBikeRackJSONArray() throws IOException, JSONException {
 

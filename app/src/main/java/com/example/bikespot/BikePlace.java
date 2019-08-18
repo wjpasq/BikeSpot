@@ -17,6 +17,7 @@ public class BikePlace {
     private String businessName;
     private String parkingModules;
     private int totalSpaces;
+    private int openSpaces;
     private double latitude;
     private double longitude;
 
@@ -27,34 +28,20 @@ public class BikePlace {
         businessName = "";
         parkingModules = "";
         totalSpaces = 0;
+        openSpaces = 0;
         latitude = 0;
         longitude = 0;
 
     }
 
-    public BikePlace(int objectID, String address, String businessName, String parkingModules, int totalSpaces, double latitude, double longitude) {
+    public BikePlace(int objectID, String address, String businessName, String parkingModules, int totalSpaces, int openSpaces, double latitude, double longitude) {
         this.objectID = objectID;
         this.address = address;
         this.businessName = businessName;
         this.parkingModules = parkingModules;
         this.totalSpaces = totalSpaces;
+        this.openSpaces = openSpaces;
         this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -98,6 +85,30 @@ public class BikePlace {
         this.totalSpaces = totalSpaces;
     }
 
+    public int getOpenSpaces() {
+        return openSpaces;
+    }
+
+    public void setOpenSpaces(int openSpaces) {
+        this.openSpaces = openSpaces;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public String toString() {
         return "BikePlace{" +
@@ -106,6 +117,7 @@ public class BikePlace {
                 ", businessName='" + businessName + '\'' +
                 ", parkingModules='" + parkingModules + '\'' +
                 ", totalSpaces=" + totalSpaces +
+                ", openSpaces=" + openSpaces +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 '}';
