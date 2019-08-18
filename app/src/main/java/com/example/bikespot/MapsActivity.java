@@ -10,8 +10,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,8 +40,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
@@ -47,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location lastLocation;
     private Marker currentUserLocationMarker;
     private static final int REQUEST_USER_LOCATION_CODE = 99;
+    private final ArrayList<BikePlace> finalBikePlaces = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +82,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng cStat = new LatLng(30.6280, -96.3344);
-
-
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             buildGoogleAPIClient();
-
             mMap.setMyLocationEnabled(true);
+
+            try {
+                addBikeRacks();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private void addBikeRacks() throws IOException, JSONException, ExecutionException, InterruptedException {
+        final MapData mapData = new MapData();
+
+        ArrayList<BikePlace> bikePlaces = mapData.getBikePlaces();
 
 
+        for (BikePlace bp : bikePlaces) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            LatLng latLng = new LatLng(bp.getLatitude(), bp.getLongitude());
+            markerOptions.position(latLng);
+            markerOptions.title(bp.getBusinessName());
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerOptions.snippet(bp.toString());
+
+            //add click listener for the marker
+
+            mMap.addMarker(markerOptions);
+        }
     }
 
     public boolean checkUserLocationPermission() {
@@ -148,7 +178,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerOptions.title("user current location");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
+
         currentUserLocationMarker = mMap.addMarker(markerOptions);
+        mMap.setOnMarkerClickListener(this);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
@@ -161,8 +193,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(1100);
-        locationRequest.setFastestInterval(1100);
+        locationRequest.setInterval(100000);
+        locationRequest.setFastestInterval(100000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -179,4 +211,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.d("SUCCESS", "Marker" + marker.getTitle() + "has been clicked");
+        return false;
+    }
 }
+
