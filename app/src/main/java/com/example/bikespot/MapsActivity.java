@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,7 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        textView_Test = findViewById(R.id.textView_test);
+        //textView_Test = findViewById(R.id.textView_test);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkUserLocationPermission();
@@ -121,6 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             markerOptions.snippet(bp.toString());
 
             //add click listener for the marker
+            mMap.setOnMarkerClickListener(this);
 
             mMap.addMarker(markerOptions);
         }
@@ -211,6 +213,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d("SUCCESS", "Marker" + marker.getTitle() + "has been clicked");
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+        bottomSheetDialog.show(getSupportFragmentManager(), "BottomSheet");
+
         return false;
     }
 }
